@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <h2>Todo Project</h2>
+        <form action="/add" method="POST">
+            <input type="text" placeholder="Add new todo" name="add" id="add">
+            <button type="submit">Add</button>
+        </form>
+
+
+        <section>
+            <p>Available todos ...</p>
+            <ul>
+                {% for todo in todos %}
+                <li>
+                    {{ todo }}
+                    <div>
+                        <button
+                            type="button"
+                            onclick="openUpdate('{{ todo }}')"
+                            title="Update">
+                            ✏️
+                        </button>
+
+                        <form
+                            action="{{ url_for('delete', i=todo) }}"
+                            method="POST"
+                            style="display: inline;"
+                        >
+                            <button type="submit" title="Delete">
+                                🗑️
+                            </button>
+                        </form>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+
+
+
+    <div id="updatePopup" class="popup">
+        <div class="popup-content">
+            
+            <form id="updateForm" method="POST">
+                <h3>Update Todo</h3>
+
+                <input
+                    type="text"
+                    name="update"
+                    id="updateInput"
+                >
+
+                <div class="popup-buttons">
+
+                    <button type="submit">
+                        Update
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="closeUpdate()">
+                        Cancel
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+
+        function openUpdate(todo) {
+
+            document.getElementById("updateInput").value = todo;
+
+            document.getElementById("updateForm").action =
+                "/update/" + encodeURIComponent(todo);
+
+            document.getElementById("updatePopup").style.display = "flex";
+        }
+
+
+        function closeUpdate() {
+
+            document.getElementById("updatePopup").style.display = "none";
+        }
+
+    </script>
+
+</body>
+</html>
